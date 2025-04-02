@@ -17,10 +17,10 @@ export interface ShopCatalogItemUpdate {
   sku_id: string;
   variants: {
     itemId?: string | null;
-    price: number;
-    discount: number;
-    quantity: number;
-    unit: string;
+    price: number | null;
+    discount: number | null;
+    quantity: number | null;
+    unit: string | null;
   }[];
 }
 
