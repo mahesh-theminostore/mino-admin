@@ -5,16 +5,16 @@ export interface CatalogModel {
   type: 'LOOSE' | 'PACKED';
   availableUnits: string[];
   quantity: {
-    size: number;
+    size: number | null;
     unit: string;
-  };
+  } | null;
   quantityLabel: string;
   variants: {
     itemId?: string | null;
-    quantity: number;
+    quantity: number | null;
     unit: string;
-    price: number;
-    sellingPrice: number;
-    discount: number;
+    price: number | null;
+    sellingPrice: number | null;
+    discount: number | null;
   }[];
 }

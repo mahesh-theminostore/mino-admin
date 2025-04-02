@@ -20,8 +20,13 @@ const VariantForm: React.FC<VariantFormProps> = ({ variant, onChange, availableU
       <label>Quantity:</label>
       <input
         type='number'
-        value={variant.quantity}
-        onChange={(e) => onChange({ ...variant, quantity: Number(e.target.value) })}
+        value={variant.quantity ?? ''}
+        onChange={(e) =>
+          onChange({
+            ...variant,
+            quantity: e.target.value === '' ? null : Number(e.target.value),
+          })
+        }
       />
     </div>
     <div>
@@ -39,21 +44,31 @@ const VariantForm: React.FC<VariantFormProps> = ({ variant, onChange, availableU
       <label>Price:</label>
       <input
         type='number'
-        value={variant.price}
-        onChange={(e) => onChange({ ...variant, price: Number(e.target.value) })}
+        value={variant.price ?? ''}
+        onChange={(e) =>
+          onChange({
+            ...variant,
+            price: e.target.value === '' ? null : Number(e.target.value),
+          })
+        }
       />
     </div>
     <div>
       <label>Discount (%):</label>
       <input
         type='number'
-        value={variant.discount}
-        onChange={(e) => onChange({ ...variant, discount: Number(e.target.value) })}
+        value={variant.discount ?? ''}
+        onChange={(e) =>
+          onChange({
+            ...variant,
+            discount: e.target.value === '' ? null : Number(e.target.value),
+          })
+        }
       />
     </div>
     <div>
       <label>Selling Price:</label>
-      <input type='number' readOnly value={variant.sellingPrice} />
+      <input type='number' readOnly value={variant.sellingPrice ?? ''} />
     </div>
   </div>
 );
@@ -249,6 +264,8 @@ const ShopDetailsForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
               <input
                 type='text'
                 value={item.name}
+                readOnly
+                className='bg-gray-100'
                 onChange={(e) => updateItem(index, 'name', e.target.value as CatalogModel['name'])}
               />
             </div>
@@ -268,10 +285,10 @@ const ShopDetailsForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                   <div className='flex gap-2'>
                     <input
                       type='number'
-                      value={item.quantity?.size ?? 0}
+                      value={item.quantity?.size ?? ''}
                       onChange={(e) =>
                         updateItem(index, 'quantity', {
-                          size: Number(e.target.value),
+                          size: e.target.value === '' ? null : Number(e.target.value),
                           unit: item.quantity?.unit ?? item.availableUnits[0] ?? '',
                         } as CatalogModel['quantity'])
                       }
