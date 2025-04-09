@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
@@ -13,7 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-  const [redirectPath, setRedirectPath] = useState<string>('/dashboard');
+  const [redirectPath, setRedirectPath] = useState<string>('/');
 
   useEffect(() => {
     // Check for token in localStorage on initial load
@@ -22,12 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ 
-      isAuthenticated, 
-      setIsAuthenticated,
-      redirectPath,
-      setRedirectPath 
-    }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        setIsAuthenticated,
+        redirectPath,
+        setRedirectPath,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -39,4 +41,4 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-} 
+}

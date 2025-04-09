@@ -5,6 +5,17 @@ import { HTTP_METHOD } from 'next/dist/server/web/http';
 
 type ParamsType = string | string[][] | Record<string, string> | URLSearchParams;
 
+function handleApiError(res: Response) {
+  if (res.status === 401) {
+    window.alert('Logged out');
+    window.location.href = '/signin';
+
+    return;
+  }
+
+  throw new Error(`HTTP Error: ${res.status} - ${res.statusText}`);
+}
+
 export class ApiClient {
   authToken: string | null = null;
   private readonly API_BASE_URL: string = process.env.API_BASE_URL || 'http://localhost:3000';
@@ -40,7 +51,7 @@ export class ApiClient {
       });
 
       if (!res.ok) {
-        throw new Error(`HTTP Error: ${res.status} - ${res.statusText}`);
+        handleApiError(res);
       }
 
       const resJson = await res.json();
@@ -87,7 +98,7 @@ export class ApiClient {
     });
 
     if (!res.ok) {
-      throw new Error(`HTTP Error: ${res.status} - ${res.statusText}`);
+      handleApiError(res);
     }
 
     const resJson = await res.json();
