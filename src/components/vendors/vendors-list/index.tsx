@@ -20,52 +20,56 @@ export default function VendorsList() {
     setSelectedVendor(row);
   }
 
-  const columns = [
-    {
-      field: 'id',
-      width: 250,
-      cellRenderer: (params: CustomCellRendererProps) => (
-        <button onClick={() => handleShowDetails(params.data)}>{params.value}</button>
-      ),
-    },
-    {
-      field: 'name',
-      filter: true,
-      filterParams: {
-        filterOptions: ['contains'],
-      },
-    },
-    {
-      field: 'active',
-    },
-    {
-      field: 'dob',
-    },
-    {
-      field: 'phoneNumber',
-      filter: true,
-      filterParams: {
-        filterOptions: ['equals'],
-      },
-    },
-    {
-      field: 'pinSet',
-    },
-    {
-      field: 'verified',
-    },
-    {
-      field: 'createdAt',
-    },
-    {
-      field: 'updatedAt',
-    },
-  ];
-
   return (
     <>
       <div style={{ width: '100%', height: '500px' }}>
-        <AgGridReact rowData={data} columnDefs={columns} loading={isLoading} pagination paginationPageSize={20} />
+        <AgGridReact<VendorListModel>
+          rowData={data}
+          columnDefs={[
+            {
+              field: 'id',
+              width: 250,
+              cellRenderer: (params: CustomCellRendererProps) => (
+                <button onClick={() => handleShowDetails(params.data)}>{params.value}</button>
+              ),
+            },
+            {
+              field: 'name',
+              filter: true,
+              filterParams: {
+                filterOptions: ['contains'],
+              },
+            },
+            {
+              field: 'active',
+            },
+            {
+              field: 'dob',
+            },
+            {
+              field: 'phoneNumber',
+              filter: true,
+              filterParams: {
+                filterOptions: ['equals'],
+              },
+            },
+            {
+              field: 'pinSet',
+            },
+            {
+              field: 'verified',
+            },
+            {
+              field: 'createdAt',
+            },
+            {
+              field: 'updatedAt',
+            },
+          ]}
+          loading={isLoading}
+          pagination
+          paginationPageSize={20}
+        />
       </div>
       <Modal className='max-w-1/2' isOpen={isOpen} onClose={closeModal} showCloseButton>
         <VendorDetails vendor={selectedVendor!} />
