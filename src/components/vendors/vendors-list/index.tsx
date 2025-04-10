@@ -30,6 +30,10 @@ export default function VendorsList() {
     },
     {
       field: 'name',
+      filter: true,
+      filterParams: {
+        filterOptions: ['contains'],
+      },
     },
     {
       field: 'active',
