@@ -2,20 +2,20 @@
 
 import React, { useState } from 'react';
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
-import { VendorListDetailsModel } from '@/models/vendor/VendorListDetailsModel';
+import { VendorListModel } from '@/models/vendor/VendorListModel';
 import { useModal } from '@/hooks/useModal';
 import { Modal } from '@/components/ui/modal';
 import VendorDetails from './vendor-details';
 import { useVendorsListViewModel } from './useVendorsListViewModel';
 
 export default function VendorsList() {
-  const [selectedVendor, setSelectedVendor] = useState<VendorListDetailsModel | null>(null);
+  const [selectedVendor, setSelectedVendor] = useState<VendorListModel | null>(null);
 
   const { data, isLoading } = useVendorsListViewModel();
 
   const { isOpen, openModal, closeModal } = useModal();
 
-  function handleShowDetails(row: VendorListDetailsModel) {
+  function handleShowDetails(row: VendorListModel) {
     openModal();
     setSelectedVendor(row);
   }

@@ -1,12 +1,12 @@
 import { useGet } from '@/hooks/useGet';
-import { VendorListDetailsModel } from '@/models/vendor/VendorListDetailsModel';
+import { VendorListModel } from '@/models/vendor/VendorListModel';
 import { VendorShopDetailsModel } from '@/models/vendor/VendorShopDetailsModel';
 import { formatAddress } from '@/utils/formatters';
 import Link from 'next/link';
 import React from 'react';
 
 interface ComponentProps {
-  vendor: VendorListDetailsModel;
+  vendor: VendorListModel;
 }
 
 interface DisplayItemProps {

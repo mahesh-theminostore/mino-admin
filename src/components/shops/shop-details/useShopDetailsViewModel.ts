@@ -1,10 +1,11 @@
-import { ShopCatalogItemUpdate, ShopService } from '@/models/shop/ShopModel';
+import { ShopCatalogItemUpdate, ShopModel } from '@/models/shop/ShopModel';
+import { ShopService } from '@/services/ShopService';
 import { useEffect, useState } from 'react';
 
 export const useShopDetailsViewModel = (shopId: string) => {
   const service = new ShopService(shopId);
 
-  const [data, setData] = useState();
+  const [data, setData] = useState<ShopModel>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
   const [errorMessage, setErrorMessage] = useState('');

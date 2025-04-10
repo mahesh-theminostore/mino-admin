@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 
-import { VendorService } from '@/models/vendor/VendorListDetailsModel';
+import { VendorService } from '@/services/VendorService';
+import { VendorListModel } from '@/models/vendor/VendorListModel';
 
 export const useVendorsListViewModel = () => {
   const service = new VendorService();
 
-  const [data, setData] = useState();
+  const [data, setData] = useState<VendorListModel[]>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
   const [errorMessage, setErrorMessage] = useState('');
@@ -14,7 +15,7 @@ export const useVendorsListViewModel = () => {
     try {
       const res = await service.getVendorsList();
 
-      setData(res?.data);
+      setData(res);
 
       setLoading(false);
     } catch (err: unknown) {

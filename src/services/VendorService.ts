@@ -1,16 +1,5 @@
 import { ApiClient } from '@/api/ApiClient';
-
-export interface VendorListDetailsModel {
-  id: string;
-  name: string;
-  active: boolean;
-  dob: string;
-  phoneNumber: string;
-  pinSet: boolean;
-  verified: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { VendorListModel } from '@/models/vendor/VendorListModel';
 
 export class VendorService {
   apiClient: ApiClient;
@@ -19,11 +8,11 @@ export class VendorService {
     this.apiClient = new ApiClient();
   }
 
-  async getVendorsList() {
+  async getVendorsList(): Promise<VendorListModel[]> {
     try {
       const res = await this.apiClient.get('/admin/api/v1/vendors');
 
-      return res;
+      return res.data;
     } catch (err) {
       throw err;
     }
