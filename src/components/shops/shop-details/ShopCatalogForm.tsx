@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from '@tanstack/react-form';
-import { CatalogModel } from '@/models/catalog/CatalogModel';
+import { ShopCatalogModel } from '@/models/shop/ShopCatalogModel';
 import { ShopCatalogItemUpdate } from '@/models/shop/ShopModel';
 
 interface ComponentProps {
-  shopItems: CatalogModel[];
+  shopItems: ShopCatalogModel[];
   onUpdateItem: (data: ShopCatalogItemUpdate) => Promise<void>;
 }
 
 interface VariantFormProps {
-  variant: CatalogModel['variants'][0];
-  onChange: (val: CatalogModel['variants'][0]) => void;
+  variant: ShopCatalogModel['variants'][0];
+  onChange: (val: ShopCatalogModel['variants'][0]) => void;
   availableUnits: string[];
 }
 
@@ -74,14 +74,14 @@ const VariantForm: React.FC<VariantFormProps> = ({ variant, onChange, availableU
 );
 
 const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) => {
-  const [items, setItems] = useState<CatalogModel[]>([]);
+  const [items, setItems] = useState<ShopCatalogModel[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
   const form = useForm({
     defaultValues: {
-      catalogItems: shopItems as CatalogModel[],
+      catalogItems: shopItems as ShopCatalogModel[],
     },
   });
 
@@ -97,7 +97,11 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
     form.setFieldValue('catalogItems', updatedItems);
   };
 
-  const updateItem = (index: number, field: keyof CatalogModel, value: CatalogModel[keyof CatalogModel]) => {
+  const updateItem = (
+    index: number,
+    field: keyof ShopCatalogModel,
+    value: ShopCatalogModel[keyof ShopCatalogModel],
+  ) => {
     const updatedItems = [...items];
     updatedItems[index] = {
       ...updatedItems[index],
@@ -107,7 +111,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
     form.setFieldValue('catalogItems', updatedItems);
   };
 
-  const updateVariant = (itemIndex: number, variantIndex: number, updatedVariant: CatalogModel['variants'][0]) => {
+  const updateVariant = (itemIndex: number, variantIndex: number, updatedVariant: ShopCatalogModel['variants'][0]) => {
     const updatedItems = [...items];
     const item = updatedItems[itemIndex];
 
@@ -247,7 +251,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                 type='text'
                 readOnly
                 value={item.pid}
-                onChange={(e) => updateItem(index, 'pid', e.target.value as CatalogModel['pid'])}
+                onChange={(e) => updateItem(index, 'pid', e.target.value as ShopCatalogModel['pid'])}
               />
             </div>
             <div>
@@ -256,7 +260,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                 type='text'
                 readOnly
                 value={item.skuId}
-                onChange={(e) => updateItem(index, 'skuId', e.target.value as CatalogModel['skuId'])}
+                onChange={(e) => updateItem(index, 'skuId', e.target.value as ShopCatalogModel['skuId'])}
               />
             </div>
             <div>
@@ -266,7 +270,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                 value={item.name}
                 readOnly
                 className='bg-gray-100'
-                onChange={(e) => updateItem(index, 'name', e.target.value as CatalogModel['name'])}
+                onChange={(e) => updateItem(index, 'name', e.target.value as ShopCatalogModel['name'])}
               />
             </div>
             <div>
@@ -290,7 +294,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                         updateItem(index, 'quantity', {
                           size: e.target.value === '' ? null : Number(e.target.value),
                           unit: item.quantity?.unit ?? item.availableUnits[0] ?? '',
-                        } as CatalogModel['quantity'])
+                        } as ShopCatalogModel['quantity'])
                       }
                     />
                     <select
@@ -299,7 +303,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                         updateItem(index, 'quantity', {
                           size: item.quantity?.size ?? 0,
                           unit: e.target.value,
-                        } as CatalogModel['quantity'])
+                        } as ShopCatalogModel['quantity'])
                       }
                     >
                       <option value=''>Select Unit</option>
@@ -317,7 +321,7 @@ const ShopCatalogForm: React.FC<ComponentProps> = ({ shopItems, onUpdateItem }) 
                     type='text'
                     value={item.quantityLabel}
                     onChange={(e) =>
-                      updateItem(index, 'quantityLabel', e.target.value as CatalogModel['quantityLabel'])
+                      updateItem(index, 'quantityLabel', e.target.value as ShopCatalogModel['quantityLabel'])
                     }
                   />
                 </div>

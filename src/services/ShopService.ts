@@ -1,10 +1,10 @@
 import { ApiClient } from '@/api/ApiClient';
-import { CatalogModel } from '@/models/catalog/CatalogModel';
+import { ShopCatalogModel } from '@/models/shop/ShopCatalogModel';
 import { ShopCatalogItemUpdate, ShopModel, ShopViewModel } from '@/models/shop/ShopModel';
 
 interface ShopDetailsResponse {
   shop: ShopModel;
-  items: CatalogModel[];
+  items: ShopCatalogModel[];
 }
 
 export class ShopService {

@@ -1,4 +1,4 @@
-export interface CatalogModel {
+export interface ShopCatalogModel {
   pid: string;
   skuId: string;
   name: string;

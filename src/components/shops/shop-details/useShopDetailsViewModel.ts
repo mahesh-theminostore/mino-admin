@@ -1,4 +1,4 @@
-import { CatalogModel } from '@/models/catalog/CatalogModel';
+import { ShopCatalogModel } from '@/models/shop/ShopCatalogModel';
 import { ShopCatalogItemUpdate, ShopViewModel } from '@/models/shop/ShopModel';
 import { ShopService } from '@/services/ShopService';
 import { useEffect, useState } from 'react';
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 export const useShopDetailsViewModel = (shopId: string) => {
   const service = new ShopService(shopId);
 
-  const [data, setData] = useState<{ shop: ShopViewModel; items: CatalogModel[] }>();
+  const [data, setData] = useState<{ shop: ShopViewModel; items: ShopCatalogModel[] }>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
   const [errorMessage, setErrorMessage] = useState('');
