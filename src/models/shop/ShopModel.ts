@@ -1,14 +1,33 @@
+import { AddressModel } from '../AddressModel';
+
 export interface ShopModel {
   id: string;
   name: string;
   active: boolean;
-  workingHours: object[];
+  workingHours: {
+    start: string;
+    end: string;
+  }[];
   deliveryEnabled: boolean;
   deliveryAvailable: boolean;
-  address: object;
-  deliveryRules: object;
+  address: AddressModel;
+  deliveryRules: {
+    delivery_hours: {
+      start: string;
+      end: string;
+    }[];
+    min_amount: number;
+  };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ShopViewModel
+  extends Omit<ShopModel, 'deliveryRules' | 'createdAt' | 'updatedAt' | 'deliveryEnabled' | 'deliveryAvailable'> {
+  deliveryHours: { start: string; end: string }[];
+  minDeliveryAmount: number;
+  isDeliveryEnabled: boolean;
+  isDeliveryAvailable: boolean;
 }
 
 export interface ShopCatalogItemUpdate {

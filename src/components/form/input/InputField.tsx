@@ -1,12 +1,14 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
 interface InputProps {
-  type?: "text" | "number" | "email" | "password" | "date" | "time" | string;
+  type?: 'text' | 'number' | 'email' | 'password' | 'date' | 'time' | string;
   id?: string;
   name?: string;
+  label?: string;
   placeholder?: string;
-  defaultValue?: string | number;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   className?: string;
   min?: string;
   max?: string;
@@ -16,16 +18,19 @@ interface InputProps {
   error?: boolean;
   hint?: string; // Optional hint text
   required?: boolean;
+  list?: string;
 }
 
 const Input: FC<InputProps> = ({
-  type = "text",
+  type = 'text',
   id,
   name,
+  label,
   placeholder,
-  defaultValue,
+  value = '',
   onChange,
-  className = "",
+  onBlur,
+  className = '',
   min,
   max,
   step,
@@ -33,7 +38,8 @@ const Input: FC<InputProps> = ({
   success = false,
   error = false,
   hint,
-  required = false
+  required = false,
+  list,
 }) => {
   // Determine input styles based on state (disabled, success, error)
   let inputClasses = `h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 ${className}`;
@@ -50,33 +56,33 @@ const Input: FC<InputProps> = ({
   }
 
   return (
-    <div className="relative">
+    <div className='flex flex-col gap-2'>
+      {label && (
+        <label className='text-sm font-medium' htmlFor={name}>
+          {label}
+        </label>
+      )}
+
       <input
         type={type}
         id={id}
         name={name}
         placeholder={placeholder}
-        defaultValue={defaultValue}
+        value={value}
         onChange={onChange}
+        onBlur={onBlur}
         min={min}
         max={max}
         step={step}
         disabled={disabled}
         className={inputClasses}
         required={required}
+        list={list}
       />
 
       {/* Optional Hint Text */}
       {hint && (
-        <p
-          className={`mt-1.5 text-xs ${
-            error
-              ? "text-error-500"
-              : success
-              ? "text-success-500"
-              : "text-gray-500"
-          }`}
-        >
+        <p className={`mt-1.5 text-xs ${error ? 'text-error-500' : success ? 'text-success-500' : 'text-gray-500'}`}>
           {hint}
         </p>
       )}

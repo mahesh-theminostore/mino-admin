@@ -1,11 +1,12 @@
-import { ShopCatalogItemUpdate, ShopModel } from '@/models/shop/ShopModel';
+import { CatalogModel } from '@/models/catalog/CatalogModel';
+import { ShopCatalogItemUpdate, ShopViewModel } from '@/models/shop/ShopModel';
 import { ShopService } from '@/services/ShopService';
 import { useEffect, useState } from 'react';
 
 export const useShopDetailsViewModel = (shopId: string) => {
   const service = new ShopService(shopId);
 
-  const [data, setData] = useState<ShopModel>();
+  const [data, setData] = useState<{ shop: ShopViewModel; items: CatalogModel[] }>();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
   const [errorMessage, setErrorMessage] = useState('');
@@ -14,11 +15,29 @@ export const useShopDetailsViewModel = (shopId: string) => {
     await service.updateShopCatalogItem(data);
   }
 
+  async function updateShopDetails(data: ShopViewModel) {
+    await service.updateShopDetails(data);
+  }
+
   async function fetchShopDetails() {
     try {
       const res = await service.getShopDetails();
 
-      setData(res);
+      const { shop, items } = res;
+
+      const shopViewData: ShopViewModel = {
+        id: shop.id,
+        name: shop.name,
+        active: shop.active,
+        address: shop.address,
+        deliveryHours: shop.deliveryRules.delivery_hours || [],
+        minDeliveryAmount: shop.deliveryRules.min_amount,
+        workingHours: shop.workingHours || [],
+        isDeliveryAvailable: shop.deliveryAvailable,
+        isDeliveryEnabled: shop.deliveryEnabled,
+      };
+
+      setData({ shop: shopViewData, items });
 
       setLoading(false);
     } catch (err: unknown) {
@@ -43,6 +62,7 @@ export const useShopDetailsViewModel = (shopId: string) => {
     isLoading,
     error,
     errorMessage,
+    updateShopDetails,
     updateShopCatalogItem,
   };
 };

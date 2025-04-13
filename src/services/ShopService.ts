@@ -1,5 +1,11 @@
 import { ApiClient } from '@/api/ApiClient';
-import { ShopCatalogItemUpdate, ShopModel } from '@/models/shop/ShopModel';
+import { CatalogModel } from '@/models/catalog/CatalogModel';
+import { ShopCatalogItemUpdate, ShopModel, ShopViewModel } from '@/models/shop/ShopModel';
+
+interface ShopDetailsResponse {
+  shop: ShopModel;
+  items: CatalogModel[];
+}
 
 export class ShopService {
   apiClient: ApiClient;
@@ -10,7 +16,7 @@ export class ShopService {
     this.shopId = shopId;
   }
 
-  async getShopDetails(): Promise<ShopModel> {
+  async getShopDetails(): Promise<ShopDetailsResponse> {
     try {
       const res = await this.apiClient.get(`/admin/api/v1/shops/${this.shopId}`);
 
@@ -18,6 +24,10 @@ export class ShopService {
     } catch (err: unknown) {
       throw err;
     }
+  }
+
+  async updateShopDetails(data: ShopViewModel) {
+    await this.apiClient.post(`/admin/api/v1/shops/${this.shopId}`, data);
   }
 
   async updateShopCatalogItem(reqBody: ShopCatalogItemUpdate) {

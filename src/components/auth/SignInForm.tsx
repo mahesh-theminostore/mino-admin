@@ -69,7 +69,7 @@ export default function SignInForm() {
                   <Label>
                     Mobile Number <span className='text-error-500'>*</span>{' '}
                   </Label>
-                  <Input name='username' onChange={handleChange} required />
+                  <Input name='username' onChange={handleChange} required value={formData.username} />
                 </div>
                 <div>
                   <Label>
@@ -81,6 +81,7 @@ export default function SignInForm() {
                       type={showPassword ? 'text' : 'password'}
                       placeholder='Enter your password'
                       onChange={handleChange}
+                      value={formData.password}
                       required
                     />
                     <span
