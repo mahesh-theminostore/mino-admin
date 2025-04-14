@@ -1,9 +1,8 @@
 'use client';
 
+import { API_BASE_URL } from '@/utils/environment';
 import { Params } from 'next/dist/server/request/params';
 import { useEffect, useState } from 'react';
-
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
 export const useGet = <T>(url: string, params?: Params) => {
   const [data, setData] = useState<T | null>(null);

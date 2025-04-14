@@ -6,6 +6,7 @@ import { EyeCloseIcon, EyeIcon } from '@/icons';
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { ApiClient } from '@/api/ApiClient';
 
 export default function SignInForm() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function SignInForm() {
     username: '',
     password: '',
   });
+
+  const apiClient = new ApiClient();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setFormData((formVal) => ({
@@ -27,13 +30,7 @@ export default function SignInForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch(process.env.API_BASE_URL || '', {
-        method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const res = await apiClient.post('/admin-auth/sign-in', formData);
 
       const resJson = await res.json();
 

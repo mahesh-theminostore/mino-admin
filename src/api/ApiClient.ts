@@ -1,5 +1,6 @@
 'use client';
 
+import { API_BASE_URL } from '@/utils/environment';
 import { getFromLocalStorage } from '@/utils/storage';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 
@@ -18,7 +19,6 @@ function handleApiError(res: Response) {
 
 export class ApiClient {
   authToken: string | null = null;
-  private readonly API_BASE_URL: string = process.env.API_BASE_URL || 'http://localhost:3000';
 
   constructor() {
     this.authToken = getFromLocalStorage('token');
@@ -45,7 +45,7 @@ export class ApiClient {
         if (paramsString) requestParms = `?${paramsString}`;
       }
 
-      const res = await fetch(`${this.API_BASE_URL}${path}${requestParms}`, {
+      const res = await fetch(`${API_BASE_URL}${path}${requestParms}`, {
         method: 'GET',
         headers: requestHeaders,
       });
@@ -91,7 +91,7 @@ export class ApiClient {
       requestBody = JSON.stringify(body);
     }
 
-    const res = await fetch(`${this.API_BASE_URL}${path}${requestParms}`, {
+    const res = await fetch(`${API_BASE_URL}${path}${requestParms}`, {
       method,
       body: requestBody,
       headers: requestHeaders,
