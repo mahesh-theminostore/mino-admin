@@ -32,9 +32,7 @@ export default function SignInForm() {
     try {
       const res = await apiClient.post('/admin-auth/sign-in', formData);
 
-      const resJson = await res.json();
-
-      const { accessToken } = resJson?.data || {};
+      const { accessToken } = res.data;
 
       if (!accessToken) throw new Error('Login Error');
 

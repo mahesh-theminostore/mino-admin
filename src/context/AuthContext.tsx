@@ -13,7 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
-  const [redirectPath, setRedirectPath] = useState<string>('/');
+  const [redirectPath, setRedirectPath] = useState<string>('/vendors');
 
   useEffect(() => {
     // Check for token in localStorage on initial load
