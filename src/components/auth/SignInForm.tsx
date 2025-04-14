@@ -27,7 +27,7 @@ export default function SignInForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:3000/admin-auth/sign-in', {
+      const res = await fetch(process.env.API_BASE_URL || '', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
