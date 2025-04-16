@@ -4,7 +4,7 @@ import { API_BASE_URL } from '@/utils/environment';
 import { getFromLocalStorage } from '@/utils/storage';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 
-type ParamsType = string | string[][] | Record<string, string> | URLSearchParams;
+export type ParamsType = string | string[][] | Record<string, string> | URLSearchParams;
 
 function handleApiError(res: Response) {
   if (res.status === 401) {
