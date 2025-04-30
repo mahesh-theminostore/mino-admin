@@ -10,7 +10,7 @@ import { ApiClient } from '@/api/ApiClient';
 
 export default function SignInForm() {
   const router = useRouter();
-  const { setIsAuthenticated, redirectPath } = useAuth();
+  const { login, redirectPath } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
@@ -37,7 +37,7 @@ export default function SignInForm() {
       if (!accessToken) throw new Error('Login Error');
 
       localStorage.setItem('token', accessToken);
-      setIsAuthenticated(true);
+      login();
       router.push(redirectPath);
     } catch (err) {
       // @ts-expect-error  will define type later

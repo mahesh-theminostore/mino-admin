@@ -1,27 +1,17 @@
+import React from 'react';
+import Link from 'next/link';
+
 import { useGet } from '@/hooks/useGet';
+import { formatAddress } from '@/utils/formatters';
+
 import { VendorListModel } from '@/models/vendor/VendorListModel';
 import { VendorShopDetailsModel } from '@/models/vendor/VendorShopDetailsModel';
-import { formatAddress } from '@/utils/formatters';
-import Link from 'next/link';
-import React from 'react';
+
+import VendorDetailsForm from './VendorDetailsForm';
 
 interface ComponentProps {
   vendor: VendorListModel;
 }
-
-interface DisplayItemProps {
-  heading: string;
-  value: string;
-}
-
-const DisplayItem: React.FC<DisplayItemProps> = ({ heading, value }) => {
-  return (
-    <div className='flex flex-col gap-1'>
-      <div className='text-sm text-gray-500 decoration-solid'>{heading}</div>
-      <div className='text-sm'>{value}</div>
-    </div>
-  );
-};
 
 const VendorDetails: React.FC<ComponentProps> = ({ vendor }) => {
   const { data: shops, isLoading } = useGet<VendorShopDetailsModel[]>(`/admin/api/v1/vendors/${vendor.id}/shops`);
@@ -30,15 +20,7 @@ const VendorDetails: React.FC<ComponentProps> = ({ vendor }) => {
     <div className='flex flex-col justify-center gap-4 p-6'>
       <h4>Vendor Information</h4>
 
-      <div className='flex flex-wrap gap-4'>
-        <DisplayItem heading='ID' value={vendor.id} />
-        <DisplayItem heading='Name' value={vendor.name} />
-        <DisplayItem heading='Active?' value={vendor.active ? 'Yes' : 'No'} />
-        <DisplayItem heading='DOB' value={vendor.dob} />
-        <DisplayItem heading='Phone Number' value={vendor.phoneNumber} />
-        <DisplayItem heading='Pin Set?' value={vendor.pinSet ? 'Yes' : 'No'} />
-        <DisplayItem heading='Verified?' value={vendor.verified ? 'Yes' : 'No'} />
-      </div>
+      <VendorDetailsForm vendor={vendor} />
 
       <div className='flex flex-col gap-2'>
         <h5>Shops</h5>
