@@ -1,7 +1,7 @@
 'use client';
 
 import { API_BASE_URL } from '@/utils/environment';
-import { getFromLocalStorage } from '@/utils/storage';
+import { getFromLocalStorage, removeFromLocalStorage } from '@/utils/storage';
 import { HTTP_METHOD } from 'next/dist/server/web/http';
 
 export type ParamsType = string | string[][] | Record<string, string> | URLSearchParams;
@@ -10,6 +10,8 @@ function handleApiError(res: Response) {
   if (res.status === 401) {
     window.alert('Logged out');
     window.location.href = '/signin';
+
+    removeFromLocalStorage('token');
 
     return;
   }

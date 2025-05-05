@@ -1,10 +1,10 @@
 'use client';
-import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { Dropdown } from '../ui/dropdown/Dropdown';
 import { DropdownItem } from '../ui/dropdown/DropdownItem';
 import { useAppHeaderViewModel } from '@/layout/useAppHeaderViewModel';
+import { UserCircleIcon } from '@/icons';
 
 export default function UserDropdown() {
   const { userProfile, userProfileLoading } = useAppHeaderViewModel();
@@ -25,9 +25,7 @@ export default function UserDropdown() {
   return (
     <div className='relative'>
       <button onClick={toggleDropdown} className='dropdown-toggle flex items-center text-gray-700 dark:text-gray-400'>
-        <span className='mr-3 h-11 w-11 overflow-hidden rounded-full'>
-          <Image width={44} height={44} src='' alt='User' />
-        </span>
+        <UserCircleIcon />
 
         <span className='mr-1 block text-theme-sm font-medium'>{userProfile?.name ?? 'User'}</span>
 

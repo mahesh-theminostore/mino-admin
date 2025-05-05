@@ -17,3 +17,9 @@ export function setInLocalStorage(key: string, value: string) {
     window.localStorage.setItem(key, value);
   }
 }
+
+export function removeFromLocalStorage(key: string) {
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem(key);
+  }
+}
