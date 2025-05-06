@@ -68,10 +68,19 @@ export class ApiClient {
     }
   }
 
-  async post(path: string, body: object = {}, method: HTTP_METHOD = 'POST', params?: ParamsType, headers: object = {}) {
-    const requestHeaders: Record<string, string> = {
-      'Content-Type': 'application/json',
-    };
+  async post(
+    path: string,
+    body: object = {},
+    method: HTTP_METHOD = 'POST',
+    params?: ParamsType,
+    headers: object = {},
+    jsonPayload: boolean = true,
+  ) {
+    const requestHeaders: Record<string, string> = jsonPayload
+      ? {
+          'Content-Type': 'application/json',
+        }
+      : {};
     let requestParms: string = '';
     let requestBody: string = '';
 
@@ -89,8 +98,11 @@ export class ApiClient {
       if (paramsString) requestParms = `?${paramsString}`;
     }
 
-    if (body) {
+    if (body && jsonPayload) {
       requestBody = JSON.stringify(body);
+    } else {
+      // @ts-expect-error  file upload formData is going to be an object passed on here
+      requestBody = body;
     }
 
     const res = await fetch(`${API_BASE_URL}${path}${requestParms}`, {
@@ -106,5 +118,15 @@ export class ApiClient {
     const resJson = await res.json();
 
     return resJson;
+  }
+
+  async postRawData(
+    path: string,
+    body: object = {},
+    method: HTTP_METHOD = 'POST',
+    params?: ParamsType,
+    headers: object = {},
+  ) {
+    return this.post(path, body, method, params, headers, false);
   }
 }

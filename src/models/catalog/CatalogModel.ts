@@ -19,6 +19,7 @@ export interface CatalogModel {
   default: boolean;
   searchKeywords: string[];
   categories: { id: string; label: string; name: string; path: string }[];
+  imageUrl: string;
 }
 
 export interface CatalogFormModel extends CatalogModel {

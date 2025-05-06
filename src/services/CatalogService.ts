@@ -1,5 +1,6 @@
 import { ApiClient } from '@/api/ApiClient';
 import { CatalogModel, CatalogUpdateModel } from '@/models/catalog/CatalogModel';
+import { FileModel } from '@/models/file/FileModel';
 
 export class CatalogService {
   apiClient: ApiClient;
@@ -31,6 +32,20 @@ export class CatalogService {
   async saveCatalogDetails(catalogId: string, data: CatalogUpdateModel) {
     try {
       await this.apiClient.post(`/admin/catalog/${catalogId}`, data, 'PUT');
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async uploadImage(file: File): Promise<FileModel> {
+    try {
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      const res = await this.apiClient.postRawData('/admin/catalog/upload-file', formData, 'POST', undefined);
+
+      return res.data;
     } catch (err) {
       throw err;
     }
