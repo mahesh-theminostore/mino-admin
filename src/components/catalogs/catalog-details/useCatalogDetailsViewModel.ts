@@ -45,6 +45,7 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
 
     const transformedData: CatalogFormModel = {
       ...data,
+      searchKeywords: [],
       categoryNames: data.categories.map((e) => e.name),
       availableQuantities: data.availableQuantities.map((e, i) => ({ ...e, id: i })),
     };
