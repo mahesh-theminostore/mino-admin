@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     return config;
   },
   images: {
-    domains: ['example.com'],
+    domains: ['example.com', 'ik.imagekit.io'],
   },
 };
 
