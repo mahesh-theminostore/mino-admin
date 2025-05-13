@@ -20,6 +20,7 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
 
   const categoryService = new CategoryService();
 
+  const [savingData, setSavingData] = useState(false);
   const [alert, setAlert] = useState<AlertType>({
     open: false,
     variant: 'info',
@@ -63,6 +64,7 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
 
   const saveCatalogFormData = async (data: CatalogFormModel) => {
     resetAlert();
+    setSavingData(true);
 
     try {
       const requestBody = { ...data, categories: data['categoryNames'] };
@@ -76,6 +78,7 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
         message: '',
       });
 
+      setSavingData(false);
       setTimeout(() => resetAlert(), 5000);
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -88,6 +91,8 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
 
         setTimeout(() => resetAlert(), 5000);
       }
+
+      setSavingData(false);
     }
   };
 
@@ -98,6 +103,7 @@ export const useCatalogDetailsViewModel = (catalogId: string) => {
     categoryData,
     categoryLoading,
     categoryError,
+    savingData,
     saveCatalogFormData,
     alert,
   };

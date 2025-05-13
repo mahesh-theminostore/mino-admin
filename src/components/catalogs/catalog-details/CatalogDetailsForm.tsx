@@ -19,6 +19,7 @@ interface ComponentProps {
   data: CatalogFormModel;
   categories: CategoryModel[];
   alert: AlertType;
+  savingData?: boolean;
   saveFormData: (data: CatalogFormModel) => void;
 }
 
@@ -36,13 +37,19 @@ const DisplayItem: React.FC<DisplayItemProps> = ({ heading, value }) => {
   );
 };
 
-const CatalogDetailsForm: React.FC<ComponentProps> = ({ data, categories, alert, saveFormData }) => {
+const CatalogDetailsForm: React.FC<ComponentProps> = ({
+  data,
+  categories,
+  alert,
+  savingData = false,
+  saveFormData,
+}) => {
   const form = useForm({
     defaultValues: { ...data } as CatalogFormModel,
     onSubmit: ({ value }) => saveFormData(value),
   });
 
-  const { uploadImage, uploadErrorMessage } = useCatalogDetailsUpdateModel();
+  const { uploadImage, uploadErrorMessage, isImageUploading } = useCatalogDetailsUpdateModel();
 
   // const [searchKeyword, setSearchKeyword] = useState('');
 
@@ -181,6 +188,7 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({ data, categories, alert,
                       url={field.state.value}
                       width='200'
                       height='200'
+                      isImageUploading={isImageUploading}
                       handleFileChange={async (file) => {
                         const asset = await uploadImage(file);
 
@@ -317,7 +325,9 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({ data, categories, alert,
 
           <div className='flex gap-32'>
             <div>
-              <Button type='submit'>Save Changes</Button>
+              <Button disabled={savingData} type='submit'>
+                {savingData ? 'Saving...' : 'Save Changes'}
+              </Button>
             </div>
 
             {alert.open && <Alert variant={alert.variant} title={alert.title} message={alert.message} />}

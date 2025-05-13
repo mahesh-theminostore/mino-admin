@@ -19,6 +19,7 @@ const CatalogDetails: React.FC<ComponentProps> = ({ catalogId }) => {
     categoryLoading,
     alert,
     saveCatalogFormData,
+    savingData,
   } = useCatalogDetailsViewModel(catalogId);
 
   const isLoading = categoryLoading || catalogLoading;
@@ -34,7 +35,13 @@ const CatalogDetails: React.FC<ComponentProps> = ({ catalogId }) => {
   };
 
   return (
-    <CatalogDetailsForm data={catalogData!} categories={categoryData!} saveFormData={saveFormData} alert={alert} />
+    <CatalogDetailsForm
+      data={catalogData!}
+      categories={categoryData!}
+      saveFormData={saveFormData}
+      savingData={savingData}
+      alert={alert}
+    />
   );
 };
 
