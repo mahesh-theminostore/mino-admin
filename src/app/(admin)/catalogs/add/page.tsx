@@ -1,5 +1,4 @@
 import AddCatalog from '@/components/catalogs/add-catalog';
-import CatalogDetails from '@/components/catalogs/catalog-details';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import { Metadata } from 'next';
 import React from 'react';
