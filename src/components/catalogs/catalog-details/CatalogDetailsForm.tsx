@@ -15,6 +15,8 @@ import Alert from '@/components/ui/alert/Alert';
 import ImageUpload from '@/components/common/ImageUpload';
 import { useCatalogDetailsUpdateModel } from './useCatalogDetailsUpdateModel';
 import UniqueProductSearch from './UniqueProductSearch';
+import { Modal } from '@/components/ui/modal';
+import Link from 'next/link';
 
 interface ComponentProps {
   data: CatalogFormModel | AddCatalogFormModel;
@@ -47,8 +49,15 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
   savingData = false,
   saveFormData,
 }) => {
-  const { uploadImage, uploadErrorMessage, isImageUploading, uniqueProducts, isSavingData, createCatalogItem } =
-    useCatalogDetailsUpdateModel(mode);
+  const {
+    uploadImage,
+    uploadErrorMessage,
+    isImageUploading,
+    uniqueProducts,
+    isSavingData,
+    createCatalogItem,
+    isDataSaved,
+  } = useCatalogDetailsUpdateModel(mode);
 
   const form = useForm({
     defaultValues: { ...data } as CatalogFormModel,
@@ -71,6 +80,32 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
       )}
 
       {uploadErrorMessage && <Alert title='Error' message={uploadErrorMessage} variant='error' />}
+
+      <Modal
+        showCloseButton={false}
+        isOpen={isDataSaved}
+        onClose={() => {}}
+        key='form-submission-confirmation-modal'
+        className='max-w-1/4 p-6'
+      >
+        <div className='flex flex-col items-center gap-8'>
+          <p>New Catalog Item Created</p>
+
+          <div className='flex gap-4'>
+            <Button
+              variant='primary'
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              Add Another
+            </Button>
+            <Link href='/catalogs'>
+              <Button variant='outline'>Close</Button>
+            </Link>
+          </div>
+        </div>
+      </Modal>
 
       <form
         name='catalog-details-form'
@@ -134,7 +169,7 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
                   {(field) => (
                     <Checkbox
                       id='catalog-item-default'
-                      label='Default?'
+                      label='New Product?'
                       checked={field.state.value}
                       onChange={(checked) => {
                         field.setValue(checked);

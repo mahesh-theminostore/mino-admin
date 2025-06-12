@@ -16,9 +16,9 @@ const CatalogListPage = () => {
       <PageBreadcrumb pageTitle='Catalog List' />
       <div className='flex flex-col gap-4'>
         <div>
-          <Button>
-            <Link href='/catalogs/add'>Add New Catalog Item</Link>
-          </Button>
+          <Link href='/catalogs/add'>
+            <Button>Add New Catalog Item</Button>
+          </Link>
         </div>
 
         <CatalogList />

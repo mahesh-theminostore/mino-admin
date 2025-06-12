@@ -16,6 +16,7 @@ export const useCatalogDetailsUpdateModel = (mode: 'create' | 'update') => {
     title: '',
     message: '',
   });
+  const [isDataSaved, setDataSaved] = useState(false);
 
   const {
     data: uniqueProducts,
@@ -60,12 +61,14 @@ export const useCatalogDetailsUpdateModel = (mode: 'create' | 'update') => {
   };
 
   const createCatalogItem = async (data: AddCatalogFormModel) => {
-    // return console.log(data);
-
     resetAlert();
     setSavingData(true);
+
     try {
-      await service.addCatalogItem(data);
+      const requestBody = { ...data, categories: data['categoryNames'] };
+      await service.addCatalogItem(requestBody);
+
+      setDataSaved(true);
     } catch (err: unknown) {
       let message = 'something went wrong';
       if (err instanceof Error) message = err.message;
@@ -91,5 +94,7 @@ export const useCatalogDetailsUpdateModel = (mode: 'create' | 'update') => {
     createCatalogItem,
     isSavingData,
     alert,
+    isDataSaved,
+    setDataSaved,
   };
 };

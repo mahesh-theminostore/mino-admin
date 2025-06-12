@@ -37,5 +37,6 @@ export interface CatalogUpdateModel extends Omit<CatalogModel, 'categories'> {
 
 export interface AddCatalogFormModel extends Omit<CatalogModel, 'id' | 'categories' | 'skuId' | 'pid'> {
   categories: string[];
+  categoryNames: string[];
   pid?: string;
 }
