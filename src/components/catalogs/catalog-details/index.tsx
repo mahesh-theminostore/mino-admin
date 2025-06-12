@@ -3,13 +3,14 @@
 import React from 'react';
 import { useCatalogDetailsViewModel } from './useCatalogDetailsViewModel';
 import CatalogDetailsForm from './CatalogDetailsForm';
-import { CatalogFormModel } from '@/models/catalog/CatalogModel';
+import { AddCatalogFormModel, CatalogFormModel } from '@/models/catalog/CatalogModel';
 
 interface ComponentProps {
   catalogId: string;
+  mode: 'create' | 'update';
 }
 
-const CatalogDetails: React.FC<ComponentProps> = ({ catalogId }) => {
+const CatalogDetails: React.FC<ComponentProps> = ({ catalogId, mode }) => {
   const {
     catalogData,
     catalogLoading,
@@ -30,12 +31,13 @@ const CatalogDetails: React.FC<ComponentProps> = ({ catalogId }) => {
 
   if (error) return <div>{error}</div>;
 
-  const saveFormData = (data: CatalogFormModel) => {
-    saveCatalogFormData(data);
+  const saveFormData = (data: CatalogFormModel | AddCatalogFormModel) => {
+    saveCatalogFormData(data as CatalogFormModel);
   };
 
   return (
     <CatalogDetailsForm
+      mode={mode}
       data={catalogData!}
       categories={categoryData!}
       saveFormData={saveFormData}

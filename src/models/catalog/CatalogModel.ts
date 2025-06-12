@@ -6,7 +6,7 @@ export interface CatalogModel {
   type: 'LOOSE' | 'PACKED';
   description: string;
   brand: string;
-  price: number;
+  price: number | null;
   fssaiLicense: string;
   nutritionInformation: string;
   active: boolean;
@@ -22,10 +22,20 @@ export interface CatalogModel {
   imageUrl: string;
 }
 
+export interface UniqueProductsModel {
+  pid: string;
+  name: string;
+}
+
 export interface CatalogFormModel extends CatalogModel {
   categoryNames: string[];
 }
 
 export interface CatalogUpdateModel extends Omit<CatalogModel, 'categories'> {
   categories: string[];
+}
+
+export interface AddCatalogFormModel extends Omit<CatalogModel, 'id' | 'categories' | 'skuId' | 'pid'> {
+  categories: string[];
+  pid?: string;
 }

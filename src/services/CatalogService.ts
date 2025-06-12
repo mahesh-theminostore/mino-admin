@@ -1,5 +1,10 @@
 import { ApiClient } from '@/api/ApiClient';
-import { CatalogModel, CatalogUpdateModel } from '@/models/catalog/CatalogModel';
+import {
+  AddCatalogFormModel,
+  CatalogModel,
+  CatalogUpdateModel,
+  UniqueProductsModel,
+} from '@/models/catalog/CatalogModel';
 import { FileModel } from '@/models/file/FileModel';
 
 export class CatalogService {
@@ -29,6 +34,14 @@ export class CatalogService {
     }
   }
 
+  async addCatalogItem(data: AddCatalogFormModel) {
+    try {
+      await this.apiClient.post(`/admin/catalog`, data);
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async saveCatalogDetails(catalogId: string, data: CatalogUpdateModel) {
     try {
       await this.apiClient.post(`/admin/catalog/${catalogId}`, data, 'PUT');
@@ -44,6 +57,16 @@ export class CatalogService {
       formData.append('file', file);
 
       const res = await this.apiClient.postRawData('/admin/catalog/upload-file', formData, 'POST', undefined);
+
+      return res.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getAllUniqueProducts(): Promise<UniqueProductsModel[]> {
+    try {
+      const res = await this.apiClient.get('/admin/catalog/unique-products');
 
       return res.data;
     } catch (err) {

@@ -7,20 +7,22 @@ import MultiSelect from '@/components/form/MultiSelect';
 import Select from '@/components/form/Select';
 import Button from '@/components/ui/button/Button';
 import { PlusIcon, TrashBinIcon } from '@/icons';
-import { CatalogFormModel, CatalogModel } from '@/models/catalog/CatalogModel';
+import { AddCatalogFormModel, CatalogFormModel, CatalogModel } from '@/models/catalog/CatalogModel';
 import { CategoryModel } from '@/models/tags/CategoryModel';
 import { useForm } from '@tanstack/react-form';
 import { AlertType } from './useCatalogDetailsViewModel';
 import Alert from '@/components/ui/alert/Alert';
 import ImageUpload from '@/components/common/ImageUpload';
 import { useCatalogDetailsUpdateModel } from './useCatalogDetailsUpdateModel';
+import UniqueProductSearch from './UniqueProductSearch';
 
 interface ComponentProps {
-  data: CatalogFormModel;
+  data: CatalogFormModel | AddCatalogFormModel;
+  mode: 'create' | 'update';
   categories: CategoryModel[];
   alert: AlertType;
   savingData?: boolean;
-  saveFormData: (data: CatalogFormModel) => void;
+  saveFormData: (data: CatalogFormModel | AddCatalogFormModel) => void;
 }
 
 interface DisplayItemProps {
@@ -39,27 +41,34 @@ const DisplayItem: React.FC<DisplayItemProps> = ({ heading, value }) => {
 
 const CatalogDetailsForm: React.FC<ComponentProps> = ({
   data,
+  mode,
   categories,
   alert,
   savingData = false,
   saveFormData,
 }) => {
+  const { uploadImage, uploadErrorMessage, isImageUploading, uniqueProducts, isSavingData, createCatalogItem } =
+    useCatalogDetailsUpdateModel(mode);
+
   const form = useForm({
     defaultValues: { ...data } as CatalogFormModel,
-    onSubmit: ({ value }) => saveFormData(value),
+    onSubmit: ({ value }) => {
+      if (mode === 'update') saveFormData(value);
+      else createCatalogItem(value as unknown as AddCatalogFormModel);
+    },
   });
-
-  const { uploadImage, uploadErrorMessage, isImageUploading } = useCatalogDetailsUpdateModel();
 
   // const [searchKeyword, setSearchKeyword] = useState('');
 
   return (
     <div className='flex flex-col gap-8'>
-      <div className='flex flex-row gap-16'>
-        <DisplayItem heading='ID' value={data.id} />
-        <DisplayItem heading='SKU ID' value={data.skuId} />
-        <DisplayItem heading='PID' value={data.pid} />
-      </div>
+      {mode === 'update' && (
+        <div className='flex flex-row gap-16'>
+          {'id' in data && <DisplayItem heading='ID' value={data.id} />}
+          {'skuId' in data && <DisplayItem heading='SKU ID' value={data.skuId} />}
+          {'pid' in data && <DisplayItem heading='PID' value={data.pid!} />}
+        </div>
+      )}
 
       {uploadErrorMessage && <Alert title='Error' message={uploadErrorMessage} variant='error' />}
 
@@ -75,36 +84,40 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
           <div className='flex justify-between gap-16'>
             <div className='flex flex-col gap-8'>
               <div className='flex flex-row gap-16'>
-                <form.Field name='name' key='catalog-item-name'>
-                  {(field) => (
-                    <Input
-                      id='catalog-item-name'
-                      label='Name'
-                      placeholder='Name'
-                      required
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                    />
-                  )}
-                </form.Field>
+                <div className='max-w-[300px]'>
+                  <form.Field name='name' key='catalog-item-name'>
+                    {(field) => (
+                      <Input
+                        id='catalog-item-name'
+                        label='Name'
+                        placeholder='Name'
+                        required
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    )}
+                  </form.Field>
+                </div>
 
-                <form.Field name='price' key='catalog-item-price'>
-                  {(field) => (
-                    <Input
-                      id='catalog-item-price'
-                      label='Price'
-                      placeholder='Price'
-                      type='number'
-                      required
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(parseInt(e.target.value))}
-                    />
-                  )}
-                </form.Field>
+                <div className='max-w-[150px]'>
+                  <form.Field name='price' key='catalog-item-price'>
+                    {(field) => (
+                      <Input
+                        id='catalog-item-price'
+                        label='Price'
+                        placeholder='Price'
+                        type='number'
+                        required
+                        name={field.name}
+                        value={field.state.value || ''}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(parseInt(e.target.value))}
+                      />
+                    )}
+                  </form.Field>
+                </div>
 
                 <form.Field name='active' key='catalog-item-active'>
                   {(field) => (
@@ -123,10 +136,32 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
                       id='catalog-item-default'
                       label='Default?'
                       checked={field.state.value}
-                      onChange={(checked) => field.setValue(checked)}
+                      onChange={(checked) => {
+                        field.setValue(checked);
+
+                        if (checked) form.setFieldValue('pid', '');
+                      }}
                     />
                   )}
                 </form.Field>
+
+                <form.Subscribe selector={(state) => state.values.default}>
+                  {(isDefault) =>
+                    isDefault ? null : (
+                      <form.Field name='pid' key='catalog-item-pid'>
+                        {(field) => (
+                          <UniqueProductSearch
+                            value={field.state.value}
+                            options={
+                              uniqueProducts?.map((product) => ({ label: product.name, value: product.pid })) || []
+                            }
+                            onChange={(val) => field.setValue(val)}
+                          />
+                        )}
+                      </form.Field>
+                    )
+                  }
+                </form.Subscribe>
               </div>
 
               <div className='flex flex-row gap-16'>
@@ -163,18 +198,20 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
 
                 <form.Field name='categories' key={'catalog-item-categories'}>
                   {() => (
-                    <MultiSelect
-                      label='Categories'
-                      defaultSelected={form.getFieldValue('categoryNames')}
-                      options={categories.map((c) => ({
-                        value: c.name,
-                        text: c.label,
-                        selected: form.getFieldValue('categoryNames').includes(c.name),
-                      }))}
-                      onChange={(selected) => {
-                        form.setFieldValue('categoryNames', selected);
-                      }}
-                    />
+                    <div className='max-w-[400px]'>
+                      <MultiSelect
+                        label='Categories'
+                        defaultSelected={form.getFieldValue('categoryNames')}
+                        options={categories.map((c) => ({
+                          value: c.name,
+                          text: c.label,
+                          selected: form.getFieldValue('categoryNames').includes(c.name),
+                        }))}
+                        onChange={(selected) => {
+                          form.setFieldValue('categoryNames', selected);
+                        }}
+                      />
+                    </div>
                   )}
                 </form.Field>
               </div>
@@ -325,8 +362,8 @@ const CatalogDetailsForm: React.FC<ComponentProps> = ({
 
           <div className='flex gap-32'>
             <div>
-              <Button disabled={savingData} type='submit'>
-                {savingData ? 'Saving...' : 'Save Changes'}
+              <Button disabled={savingData || isSavingData} type='submit'>
+                {savingData || isSavingData ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>
 
