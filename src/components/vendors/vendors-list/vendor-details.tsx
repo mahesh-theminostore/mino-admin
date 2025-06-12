@@ -31,11 +31,9 @@ const VendorDetails: React.FC<ComponentProps> = ({ vendor }) => {
           <div key={`shop-${shop.id}`} className='flex flex-col gap-2 rounded-lg border border-black p-3'>
             <div className='flex w-full justify-between'>
               <div>
-                {shop.name} (
                 <Link className='text-blue-light-600' href={`/shops/${shop.id}`} target='_blank'>
-                  {shop.id}
+                  {shop.name} (Open Shop & Edit Items)
                 </Link>
-                )
               </div>
               <div className={`${shop.active ? 'text-active' : 'text-inactive'}`}>
                 {shop.active ? 'Active' : 'InActive'}
